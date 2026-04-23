@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FordPass® — Carlos Gutierres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../case-study.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <div id="cursor" class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="../src/case-study.jsx"></script>
+  <script type="text/babel">
+    const data = {
+      client: "Ford Motor Company",
+      role: "Product Designer",
+      year: "2022 — 2023",
+      scope: "Mobile app · Design system",
+      title: <>FordPass® — <span className="serif">the connected</span> drive.</>,
+      lead: <>Rethinking the daily touchpoint between Ford owners and their vehicles — from remote start to service scheduling — for the Brazilian market.</>,
+      cover: "https://framerusercontent.com/images/VRKHcCTF7ctnBzXxlql8cKU4Xys.jpg",
+
+      context: [
+        "FordPass is Ford's global companion app — the digital layer that sits between an owner and their vehicle. In Brazil, it handles remote commands, vehicle health, service booking, dealership relationships and loyalty rewards inside a single experience.",
+        "<span class='muted'>My role was to shape the Brazilian version of the product — adapting global patterns to the specifics of how Brazilian drivers interact with their car, their dealer and their city.</span>",
+      ],
+      challenge: [
+        "The existing flows mixed transactional tasks (pay for a service, schedule maintenance) with relational ones (status of my vehicle, loyalty status, news from Ford). Users arrived with a clear intent and had to navigate around content to find it.",
+        "We needed to rebuild the experience around <strong>intent</strong> — making the vehicle itself, its status and the next available action the center of the home screen, without losing the communication surface Ford's marketing team relies on.",
+      ],
+      gallery1: null,
+
+      approachTitle: <>Vehicle-first, <span className="serif">not brand-first.</span></>,
+      approach: [
+        "We started by mapping the six most frequent user intents — from <em>\"I want to start my car\"</em> to <em>\"I need to schedule a service\"</em> — and measured how many taps stood between the app opening and each resolution.",
+        "Then we rebuilt the information architecture around those intents. The home screen stopped being a marketing surface and became a live dashboard: vehicle status on top, one primary action below, everything else accessible but deprioritised.",
+        "<span class='muted'>In parallel, I worked with the global design system team to extend components for the Brazilian context — payment methods, CPF fields, service taxonomy and local dealer network data.</span>",
+      ],
+      decisions: [
+        "Collapsed 5 tabs into 3 — <strong>Home, Services, Account</strong> — reducing cognitive load on first open.",
+        "Introduced a <strong>status-first home</strong> with vehicle snapshot, next action and a single communication slot instead of a carousel of banners.",
+        "Standardised every flow to finish in <strong>≤ 4 steps</strong>, with a persistent confirmation pattern across the whole app.",
+        "Built a <strong>dealer scheduling flow</strong> that feels like booking a ride, not filling a form — dates, times and service types as cards, not dropdowns.",
+      ],
+      wideLabel: null,
+
+      outcome: [
+        "The redesigned home shipped to Brazilian users and became the template for how local flows are structured inside the FordPass ecosystem. Time-to-first-action dropped, service scheduling completion improved and the design system gained a Brazilian module that's still in active use.",
+      ],
+      metrics: [
+        { n: "−42<span class='serif'>%</span>", l: "Taps to schedule" },
+        { n: "4.6<span class='serif'>/5</span>", l: "App store rating" },
+        { n: "3<span class='serif'>×</span>", l: "Faster onboarding" },
+        { n: "1<span class='serif'>M+</span>", l: "Active users BR" },
+      ],
+      reflection: [
+        "The hardest part wasn't the UI — it was aligning a global team, a regional marketing org and a dealer network around a single definition of \"home\". Once we agreed that the home screen serves the driver first, the design decisions wrote themselves.",
+        "<span class='muted'>I still use the intent-first framework on every product I touch. Start from what the user is trying to do, then work backwards to the interface.</span>",
+      ],
+      next: { name: <>Coral <span className="serif">Brazil</span></>, idx: "03 / 05", href: "coral.html" },
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<CaseStudyPage data={data} />);
+  </script>
+</body>
+</html>

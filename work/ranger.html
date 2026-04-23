@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ranger Scroll Drive — Carlos Gutierres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../case-study.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <div id="cursor" class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="../src/case-study.jsx"></script>
+  <script type="text/babel">
+    const data = {
+      client: "Ford Motor Company",
+      role: "UI / UX Designer",
+      year: "2021",
+      scope: "Interactive campaign",
+      title: <>Ranger Scroll <span className="serif">Drive.</span></>,
+      lead: <>Lockdown meant no one could test-drive a new Ranger. So we built a test drive you could steer with your scroll wheel — the pickup as a web experience.</>,
+      cover: "https://framerusercontent.com/images/mV7iW9VZk0QREGOTfWRoRTglcM.jpg",
+
+      context: [
+        "2020 and 2021 rewrote how people shop for cars. Showrooms closed, test drives stopped, and the traditional funnel from TV ad to dealership visit fell apart. Ford Brazil had a new Ranger to launch and no way to let people experience it.",
+        "<span class='muted'>The brief: build something that lets a potential buyer <em>feel</em> the Ranger, at home, on whatever device they happen to have open.</span>",
+      ],
+      challenge: [
+        "Digital test drives are usually video tours with a click-through menu. Passive. Forgettable. We wanted something the user did — an interaction that made them lean in instead of watch.",
+        "Constraints were tight: it had to work on desktop <em>and</em> mobile, load fast on Brazilian connections, feature the vehicle from multiple angles, and finish with a clear hand-off to the dealer network.",
+      ],
+      gallery1: null,
+
+      approachTitle: <>Scroll as the <span className="serif">wheel.</span></>,
+      approach: [
+        "The core idea came early: what if the scroll wheel <em>was</em> the steering input? Scroll down, the Ranger moves forward through the terrain. Scroll up, it reverses. Tilt with arrow keys, it steers.",
+        "We storyboarded four environments — mud, rock, river crossing, city — each highlighting a different Ranger capability. Every environment ended at a specific camera angle that revealed a product feature: off-road modes, ground clearance, towing, infotainment.",
+        "<span class='muted'>On mobile, scroll became swipe — same mechanic, different hand. We tuned the physics so the sensation felt consistent across devices, which was half the engineering effort.</span>",
+      ],
+      decisions: [
+        "<strong>Scroll as steering</strong>: the primary input is the thing every user already has. No tutorial, no onboarding.",
+        "<strong>Four environments, four features</strong>: each terrain tells one truck-buyer story without a voice-over explaining it.",
+        "<strong>Cinematic frame pacing</strong>: the drive feels continuous even though it's a series of pre-rendered scenes — load ahead, hand off smoothly.",
+        "<strong>Dealer hand-off</strong>: the experience ends with a one-tap <em>reserve a real test drive near you</em> — the whole point was to turn curiosity into a showroom visit.",
+      ],
+      wideLabel: null,
+
+      outcome: [
+        "Ranger Scroll Drive became one of the campaign's most-shared pieces. Users spent longer with the Ranger as a website than they would have on the showroom floor, and the hand-off to dealers filled the top of the funnel during a period when nothing else could.",
+      ],
+      metrics: [
+        { n: "4.2<span class='serif'>min</span>", l: "Avg. time on page" },
+        { n: "+310<span class='serif'>%</span>", l: "Vs. campaign benchmark" },
+        { n: "4<span class='serif'>×</span>", l: "Terrain environments" },
+        { n: "2021", l: "Cannes shortlist" },
+      ],
+      reflection: [
+        "Interactive work teaches you that the best input is the one the user already knows how to use. We didn't invent scroll — we gave it a new job, and users understood immediately.",
+        "<span class='muted'>Five years later, I still think about this project when a brief asks for \"engagement.\" Engagement isn't what you show. It's what you ask the user to do.</span>",
+      ],
+      next: { name: <>FordPass <span className="serif">CRM</span></>, idx: "01 / 05", href: "fordcase.html" },
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<CaseStudyPage data={data} />);
+  </script>
+</body>
+</html>

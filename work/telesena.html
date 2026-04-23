@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tele Sena — Carlos Gutierres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../case-study.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <div id="cursor" class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="../src/case-study.jsx"></script>
+  <script type="text/babel">
+    const data = {
+      client: "Silvio Santos Group",
+      role: "Senior Product Designer",
+      year: "2024 — 2025",
+      scope: "Design system · Web platform",
+      title: <>Tele Sena — a <span className="serif">system</span> rebuilt.</>,
+      lead: <>A full restructure of the design system powering one of Brazil's most iconic capitalization bond platforms — results, redemptions, purchases, all in one place.</>,
+      cover: "https://framerusercontent.com/images/6eWjjIG48XJday0WL9mYH9Yg5Hw.jpg",
+
+      context: [
+        "Tele Sena is a Brazilian institution — a single-payment capitalization bond introduced in November 1991 by the Silvio Santos Group. Millions of people use it to check results, redeem prizes and compete for weekly draws.",
+        "<span class='muted'>By 2024, the platform had grown organically for over three decades. Components were duplicated, behaviours were inconsistent across flows, and shipping anything new meant re-solving problems that had already been solved somewhere else in the product.</span>",
+      ],
+      challenge: [
+        "Design systems are never \"just\" a visual refresh. This one had to absorb years of edge cases — legal copy, accessibility requirements, high-trust financial flows — without throwing away the familiarity that long-time users depend on.",
+        "I was brought in to lead the restructure: audit what existed, define the foundation, rebuild the components, and hand off a system the internal team could evolve without me.",
+      ],
+      gallery1: null,
+
+      approachTitle: <>Audit, <span className="serif">foundation,</span> scale.</>,
+      approach: [
+        "Phase one was archaeological. I inventoried every screen in the product, every component in Figma, every variant in production — 400+ artefacts — and sorted them into what stays, what merges and what dies.",
+        "Phase two was foundation work: a token layer (colour, spacing, type, elevation, motion) that every component would reference. No more hex codes in components; no more magic numbers in padding.",
+        "<span class='muted'>Phase three was the build — atomic components first, then patterns, then full page templates. Every component shipped with documentation, usage rules and do/don't examples. The system became a product of its own.</span>",
+      ],
+      decisions: [
+        "<strong>Tokenised everything</strong>: colour, type, spacing, radius, elevation — no raw values allowed in components.",
+        "<strong>One source of truth</strong>: Figma library mirrors production. A change in one updates the other; deprecated components get a visible flag.",
+        "<strong>Accessibility baked in</strong>: every component ships with contrast, focus, keyboard and screen-reader specs — not as a later audit, as a gate on publish.",
+        "<strong>Documentation as code</strong>: usage rules live beside each component, not in a separate deck that nobody opens.",
+      ],
+      wideLabel: null,
+
+      outcome: [
+        "The restructured system became the foundation for Tele Sena's platform going forward. Shipping speed went up because the team stopped re-designing the same button, and the product started to feel like one product again, from purchase through redemption.",
+      ],
+      metrics: [
+        { n: "400<span class='serif'>+</span>", l: "Artefacts audited" },
+        { n: "1<span class='serif'>×</span>", l: "Source of truth" },
+        { n: "+55<span class='serif'>%</span>", l: "Shipping speed" },
+        { n: "WCAG<span class='serif'> AA</span>", l: "Baseline contrast" },
+      ],
+      reflection: [
+        "A design system is a negotiation. Every component is a compromise between the designer who wants control, the developer who wants consistency, and the product manager who wants speed. The system wins when all three feel like they got what they came for.",
+        "<span class='muted'>The biggest lesson: documentation isn't a nice-to-have. It's 50% of the product. Without it, you don't have a system — you have a collection.</span>",
+      ],
+      next: { name: <>Ranger <span className="serif">Scroll Drive</span></>, idx: "05 / 05", href: "ranger.html" },
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<CaseStudyPage data={data} />);
+  </script>
+</body>
+</html>

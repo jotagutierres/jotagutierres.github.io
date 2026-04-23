@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coral Brazil — Carlos Gutierres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../case-study.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <div id="cursor" class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="../src/case-study.jsx"></script>
+  <script type="text/babel">
+    const data = {
+      client: "Coral — AkzoNobel",
+      role: "Product Designer",
+      year: "2024",
+      scope: "Landing pages · Web design",
+      title: <>Coral — <span className="serif">70 years</span> of colour.</>,
+      lead: <>Designing product landing pages for one of Brazil's most iconic paint brands — a visual system that lets colour do the talking.</>,
+      cover: "https://framerusercontent.com/images/6uUfpGxnMMLw7kklMyIlYclV4mo.jpg",
+
+      context: [
+        "Coral has been painting Brazilian homes since 1954. It's a brand everyone recognises, but its digital surface had become a patchwork — inconsistent landing pages, mixed visual languages, every new product campaign reinventing the wheel.",
+        "<span class='muted'>The brief was deceptively simple: a set of product landing pages that convert. The real work was building a system flexible enough to feel custom for each launch, and consistent enough that the brand voice carries through.</span>",
+      ],
+      challenge: [
+        "A paint brand lives and dies by how colour is presented. Most product pages showed colour as a swatch — a tiny rectangle next to a paragraph of specs. That works for a hardware catalogue; it doesn't sell a dream.",
+        "I also had to account for the variety Coral ships — from premium interior lines to commercial exterior tints — each with its own audience, context and conversion goal.",
+      ],
+      gallery1: null,
+
+      approachTitle: <>Let the <span className="serif">colour</span> lead.</>,
+      approach: [
+        "I rebuilt the page from the inside out, treating colour as the primary visual language. The hero became a full-bleed colour field with the product name as a typographic overlay; every subsequent section inherited a tint derived from the line's palette.",
+        "We defined a modular structure — hero, benefits, specs, inspiration, where-to-buy — and gave each module an opinionated variant. A premium line gets the editorial treatment; a utility line gets a harder-working spec layout. Same system, different personality.",
+        "<span class='muted'>Every module was built as a responsive Figma component, handed off with copy guidance, imagery rules and a small set of allowed layout permutations — so the marketing team can ship new pages without breaking the system.</span>",
+      ],
+      decisions: [
+        "<strong>Colour as hero</strong>: the product's signature palette fills 60% of the viewport before any copy is read.",
+        "<strong>Editorial typography</strong>: large display serif paired with a neutral sans — a softer voice for a brand that sells feeling, not spec sheets.",
+        "<strong>Inspiration gallery</strong>: every product page ends with real rooms, real palettes — moving the conversation from what you're buying to what you're making.",
+        "<strong>Where-to-buy</strong>: contextual store finder with stock awareness, because online browse still ends in an offline purchase for most users.",
+      ],
+      wideLabel: null,
+
+      outcome: [
+        "The new landing page system shipped across Coral's product catalogue. Marketing can now launch a campaign page in days instead of weeks, and the pages feel like they belong to the same brand — which, for 70 years of heritage, matters.",
+      ],
+      metrics: [
+        { n: "12<span class='serif'>+</span>", l: "Product pages" },
+        { n: "−60<span class='serif'>%</span>", l: "Time to launch" },
+        { n: "+28<span class='serif'>%</span>", l: "Session duration" },
+        { n: "70<span class='serif'>yr</span>", l: "Of brand heritage" },
+      ],
+      reflection: [
+        "Systems for marketing teams have to negotiate a real tension: every campaign wants to feel special, and every campaign wants to reuse what already works. The trick isn't to enforce rigidity — it's to make the right path the easy path.",
+        "<span class='muted'>I'm most proud of the inspiration module. It reframes Coral from a paint seller to a partner in the ritual of making a home — which is what the brand has always actually been.</span>",
+      ],
+      next: { name: <>Tele <span className="serif">Sena</span></>, idx: "04 / 05", href: "telesena.html" },
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<CaseStudyPage data={data} />);
+  </script>
+</body>
+</html>
