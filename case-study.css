@@ -423,3 +423,10 @@
   }
 }
 @keyframes read-progress { to { transform: scaleX(1); } }
+
+/* red accents on the figures that carry each case */
+.cs-figures dd,
+.cs-list.-findings .k,
+.cs-results td.-delta,
+.cs-next .t .arrow,
+.cs-back .arrow-left { color: var(--accent); }

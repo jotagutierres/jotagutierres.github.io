@@ -648,3 +648,17 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
   }
   .js .enter.-in { opacity: 1; translate: 0 0; }
 }
+
+/* -------- red accents: the full stop from "interfaces." carried through the page -------- */
+.section__title::after,
+.cs-divider h2::after { content: "."; color: var(--accent); }
+
+.work__row .arrow,
+.hero__latest .arrow,
+.contact__mail .arrow { color: var(--accent); }
+.hero__latest .fig .to { color: var(--accent); }
+.about__facts dd { color: var(--accent); }
+.exp__period .now { color: var(--accent); }
+.contact__grid dd.-status { color: var(--accent); }
+.contact__mail { border-bottom-color: var(--accent); }
+.nav__links a.-active::after { background: var(--accent); }

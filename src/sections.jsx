@@ -37,7 +37,7 @@ function Hero() {
           <span className="k">Latest case study</span>
           <span className="t">{PROJECTS[0].name} <ArrowUpRight size={18} /></span>
           <span className="m">
-            Full modem activation <span className="fig">11.3% → 16.5%</span>
+            Full modem activation <span className="fig">11.3% → <span className="to">16.5%</span></span>
           </span>
         </a>
       </div>
@@ -192,7 +192,7 @@ function Experience() {
           <li key={x.company + x.period} className="exp__row">
             <span className="exp__company">{x.company}</span>
             <span className="exp__role">{x.role}</span>
-            <span className="exp__period">{x.period}</span>
+            <span className="exp__period">{x.period.endsWith("Present") ? <>{x.period.replace("Present", "")}<span className="now">Present</span></> : x.period}</span>
           </li>
         ))}
       </ul>
@@ -245,7 +245,7 @@ function Contact() {
         </div>
         <div>
           <dt>Status</dt>
-          <dd>Open to select projects</dd>
+          <dd className="-status">Open to select projects</dd>
         </div>
         <div>
           <dt>Social</dt>
