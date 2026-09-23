@@ -361,48 +361,6 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
 .work__row:hover .name { color: var(--accent); }
 .work__row:hover .arrow { color: var(--accent); }
 
-/* the list focuses on the row under the pointer */
-@media (hover: hover) {
-  .work:has(.work__row:hover) .work__row:not(:hover) .name { color: var(--fg-dim); }
-}
-
-/* hover preview: a window that opens upward, with covers wiping in over each other */
-.work__preview {
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 90;
-  width: 360px; height: 240px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--bg-elev);
-  clip-path: inset(100% 0 0 0 round 10px);
-  transition: clip-path .28s cubic-bezier(.5, 0, .75, 0);
-  will-change: transform;
-}
-.work__preview.-on {
-  clip-path: inset(0 0 0 0 round 10px);
-  transition: clip-path .6s var(--ease-out);
-}
-.work__preview img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  clip-path: inset(100% 0 0 0);
-  scale: 1.08;
-  /* the outgoing cover waits until the incoming one has covered it */
-  transition: clip-path 0s linear .6s, scale 0s linear .6s;
-}
-.work__preview img.-active {
-  z-index: 1;
-  clip-path: inset(0 0 0 0);
-  scale: 1;
-  transition: clip-path .6s var(--ease-out), scale .9s var(--ease-out);
-}
-@media (prefers-reduced-motion: reduce) {
-  .work__preview, .work__preview.-on, .work__preview img, .work__preview img.-active { transition: none; }
-}
-
 .work__row .thumb { display: none; }
 
 @media (max-width: 900px), (hover: none) {
@@ -423,9 +381,6 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
   .work__row { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
   .work__row .meta { justify-content: flex-start; text-align: left; flex-wrap: wrap; gap: 4px 12px; }
   .work__row .arrow { display: none; }
-}
-@media (hover: none), (max-width: 900px) {
-  .work__preview { display: none; }
 }
 
 /* -------- ABOUT -------- */
