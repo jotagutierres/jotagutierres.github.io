@@ -1,5 +1,5 @@
 /* global React, PROJECTS, EXPERIENCE, EDUCATION, CLIENTS, ArrowUpRight */
-const { useRef } = React;
+const { useRef, useEffect } = React;
 
 const LINKEDIN = "https://www.linkedin.com/in/carlosgutierres-productdesign-ux/";
 const EMAIL = "gutierres7j@outlook.com";
@@ -15,7 +15,7 @@ function Hero() {
         <span className="mask-line"><span>useful <span className="accent">interfaces.</span></span></span>
       </h1>
 
-      <div className="hero__lead">
+      <div className="hero__lead enter">
         <p className="intro">
           I'm <strong>Carlos Gutierres</strong>, a product designer in São Paulo. For 6+ years I've
           shaped digital products for Ford, Coral and the Silvio Santos Group.{" "}
@@ -33,18 +33,57 @@ function Hero() {
 }
 
 /* ============== WORK ============== */
-function Work() {
-  const previewRef = useRef(null);
-  const imgRef = useRef(null);
+/* Hover preview: the cover trails the pointer with a little inertia, and moving
+   between projects wipes the next cover in over the current one. */
+function useWorkPreview() {
+  const boxRef = useRef(null);
+  const s = useRef({ x: 0, y: 0, tx: 0, ty: 0, raf: 0, on: false, active: -1 }).current;
 
-  const onMove = (e, src) => {
-    const box = previewRef.current, img = imgRef.current;
-    if (!box || !img) return;
-    if (img.getAttribute("src") !== src) img.setAttribute("src", src);
-    box.style.transform = `translate(${e.clientX + 24}px, ${e.clientY - 120}px)`;
-    box.classList.add("-on");
+  useEffect(() => () => cancelAnimationFrame(s.raf), []);
+
+  const place = () => {
+    boxRef.current.style.transform = `translate3d(${s.x}px, ${s.y}px, 0)`;
   };
-  const onOut = () => previewRef.current && previewRef.current.classList.remove("-on");
+  const tick = () => {
+    const k = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 0.16;
+    s.x += (s.tx - s.x) * k;
+    s.y += (s.ty - s.y) * k;
+    place();
+    const settled = Math.abs(s.tx - s.x) < 0.3 && Math.abs(s.ty - s.y) < 0.3;
+    s.raf = !s.on && settled ? 0 : requestAnimationFrame(tick);
+  };
+
+  const onMove = (e, i) => {
+    const box = boxRef.current;
+    if (!box) return;
+    // sit just above and right of the pointer so the hovered row's text stays readable
+    s.tx = e.clientX + 24;
+    s.ty = e.clientY - 264;
+    if (!s.on) {
+      // appear where the pointer is rather than sliding in from the last spot
+      s.x = s.tx; s.y = s.ty + 16; place();
+      s.on = true;
+      box.classList.add("-on");
+    }
+    if (s.active !== i) {
+      const imgs = box.children;
+      if (imgs[s.active]) imgs[s.active].classList.remove("-active");
+      imgs[i].classList.add("-active");
+      s.active = i;
+    }
+    if (!s.raf) s.raf = requestAnimationFrame(tick);
+  };
+  const onLeave = () => {
+    s.on = false;
+    const box = boxRef.current;
+    if (box) box.classList.remove("-on");
+  };
+
+  return { boxRef, onMove, onLeave };
+}
+
+function Work() {
+  const { boxRef, onMove, onLeave } = useWorkPreview();
 
   return (
     <section id="work" className="section" aria-labelledby="work-title">
@@ -52,14 +91,13 @@ function Work() {
         <h2 id="work-title" className="section__title">Selected work</h2>
       </div>
 
-      <div className="work">
-        {PROJECTS.map((p) => (
+      <div className="work" onMouseLeave={onLeave}>
+        {PROJECTS.map((p, i) => (
           <a
             key={p.id}
             href={p.href}
             className="work__row"
-            onMouseMove={(e) => onMove(e, p.image)}
-            onMouseLeave={onOut}
+            onMouseMove={(e) => onMove(e, i)}
           >
             <span className="name">{p.name}</span>
             <span className="desc">{p.desc}</span>
@@ -71,8 +109,10 @@ function Work() {
           </a>
         ))}
 
-        <div ref={previewRef} className="work__preview" aria-hidden="true">
-          <img ref={imgRef} src={PROJECTS[0].image} alt="" />
+        <div ref={boxRef} className="work__preview" aria-hidden="true">
+          {PROJECTS.map((p) => (
+            <img key={p.id} src={p.image} alt="" decoding="async" fetchpriority="low" />
+          ))}
         </div>
       </div>
     </section>

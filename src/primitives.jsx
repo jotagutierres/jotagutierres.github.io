@@ -1,10 +1,10 @@
 /* global React */
 const { useEffect, useState } = React;
 
-/* ============ hero headline reveal ============ */
+/* ============ page entrance: headline lines rise out of their masks, then the rest follows ============ */
 function useHeroReveal() {
   useEffect(() => {
-    const lines = document.querySelectorAll(".mask-line");
+    const lines = document.querySelectorAll(".mask-line, .enter");
     // two frames so the hidden state paints before the transition starts
     const id = requestAnimationFrame(() =>
       requestAnimationFrame(() => lines.forEach((el) => el.classList.add("-in")))

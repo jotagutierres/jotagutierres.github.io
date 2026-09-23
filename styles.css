@@ -141,8 +141,9 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--border);
   background: transparent;
   color: var(--fg);
-  transition: background .25s ease, border-color .25s ease, color .25s ease;
+  transition: background .25s ease, border-color .25s ease, color .25s ease, scale .15s var(--ease-out);
 }
+.btn:active { scale: 0.97; }
 .btn:hover { background: var(--bg-elev); border-color: oklch(0.40 0.01 60); }
 .btn.-primary {
   background: var(--fg);
@@ -269,6 +270,12 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
 .work__row:hover .name { color: var(--accent); }
 .work__row:hover .arrow { color: var(--accent); }
 
+/* the list focuses on the row under the pointer */
+@media (hover: hover) {
+  .work:has(.work__row:hover) .work__row:not(:hover) .name { color: var(--fg-dim); }
+}
+
+/* hover preview: a window that opens upward, with covers wiping in over each other */
 .work__preview {
   position: fixed;
   top: 0; left: 0;
@@ -277,13 +284,33 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
   width: 360px; height: 240px;
   border-radius: 10px;
   overflow: hidden;
-  opacity: 0;
-  scale: 0.92;
-  transition: opacity .2s ease, scale .35s var(--ease-out);
-  box-shadow: 0 24px 60px -12px oklch(0 0 0 / 0.6);
+  background: var(--bg-elev);
+  clip-path: inset(100% 0 0 0 round 10px);
+  transition: clip-path .28s cubic-bezier(.5, 0, .75, 0);
+  will-change: transform;
 }
-.work__preview.-on { opacity: 1; scale: 1; }
-.work__preview img { width: 100%; height: 100%; object-fit: cover; }
+.work__preview.-on {
+  clip-path: inset(0 0 0 0 round 10px);
+  transition: clip-path .6s var(--ease-out);
+}
+.work__preview img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  clip-path: inset(100% 0 0 0);
+  scale: 1.08;
+  /* the outgoing cover waits until the incoming one has covered it */
+  transition: clip-path 0s linear .6s, scale 0s linear .6s;
+}
+.work__preview img.-active {
+  z-index: 1;
+  clip-path: inset(0 0 0 0);
+  scale: 1;
+  transition: clip-path .6s var(--ease-out), scale .9s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .work__preview, .work__preview.-on, .work__preview img, .work__preview img.-active { transition: none; }
+}
 
 @media (max-width: 900px) {
   .work__row { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
@@ -480,7 +507,14 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
 .footer a { transition: color .2s ease; }
 .footer a:hover { color: var(--fg); }
 
-/* -------- hero headline reveal (the one entrance on the site) -------- */
+/* -------- page-to-page crossfade (browsers without support just navigate) -------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out .22s ease-in both; }
+::view-transition-new(root) { animation: vt-in .4s var(--ease-out) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
+/* -------- page entrance: headline rises out of its mask, supporting content follows -------- */
 .mask-line {
   display: block;
   overflow: hidden;
@@ -499,4 +533,11 @@ a:hover > .arrow, a:hover .arrow { transform: translate(2px, -2px); }
   .js .mask-line:nth-child(3) > span { transition-delay: .16s; }
   .js .mask-line:nth-child(4) > span { transition-delay: .24s; }
   .js .mask-line.-in > span { transform: translateY(0); }
+
+  .js .enter {
+    opacity: 0;
+    translate: 0 14px;
+    transition: opacity .8s var(--ease-out) var(--enter-delay, .55s), translate .8s var(--ease-out) var(--enter-delay, .55s);
+  }
+  .js .enter.-in { opacity: 1; translate: 0 0; }
 }

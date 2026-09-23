@@ -1,4 +1,4 @@
-/* global React, SiteNav, SiteFooter, ArrowUpRight, ArrowLeft */
+/* global React, SiteNav, SiteFooter, ArrowUpRight, ArrowLeft, useHeroReveal */
 // Shared case study layout for the project pages in /work
 
 /* paragraphs and list items are authored as small HTML strings in each page */
@@ -18,9 +18,9 @@ function CaseHero({ meta, title, lead, leadMuted }) {
         ))}
       </dl>
 
-      <h1 className="cs-hero__title">{title}</h1>
-      <p className="cs-hero__lead">{lead}</p>
-      {leadMuted && <p className="cs-hero__lead -muted">{leadMuted}</p>}
+      <h1 className="cs-hero__title"><span className="mask-line"><span>{title}</span></span></h1>
+      <p className="cs-hero__lead enter">{lead}</p>
+      {leadMuted && <p className="cs-hero__lead -muted enter">{leadMuted}</p>}
     </section>
   );
 }
@@ -37,9 +37,11 @@ function CaseNext({ next }) {
 }
 
 function CaseShell({ children }) {
+  useHeroReveal();
   return (
     <>
       <SiteNav base="../" />
+      <div className="progress" aria-hidden="true" />
       <main id="top">{children}</main>
       <SiteFooter />
     </>
@@ -59,7 +61,7 @@ function CaseStudyPage({ data }) {
       />
 
       <div className="cs-cover">
-        <div className="cs-cover__inner">
+        <div className="cs-cover__inner enter -clip">
           <img src={data.cover} alt={data.coverAlt} />
         </div>
       </div>
