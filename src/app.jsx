@@ -1,21 +1,20 @@
-/* global React, ReactDOM, Nav, Hero, Work, About, Experience, Trusted, Contact, Footer, useCursor, useReveal */
+/* global React, ReactDOM, SiteNav, SiteFooter, Hero, Work, About, Experience, Clients, Contact, useHeroReveal */
 
 function App() {
-  useCursor();
-  useReveal();
+  useHeroReveal();
 
   return (
     <>
-      <Nav />
-      <main>
+      <SiteNav />
+      <main id="top">
         <Hero />
         <Work />
         <About />
         <Experience />
-        <Trusted />
+        <Clients />
         <Contact />
       </main>
-      <Footer />
+      <SiteFooter />
     </>
   );
 }

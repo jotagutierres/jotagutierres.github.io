@@ -1,51 +1,13 @@
-/* global React, PROJECTS, EXPERIENCE, EDUCATION, TRUSTED, NAV_LINKS, Magnetic, LiveClock, ArrowUpRight */
-const { useState, useRef, useEffect } = React;
+/* global React, PROJECTS, EXPERIENCE, EDUCATION, CLIENTS, ArrowUpRight */
+const { useRef } = React;
 
-/* ============== NAV ============== */
-function Nav() {
-  const [active, setActive] = useState("");
-  useEffect(() => {
-    const ids = NAV_LINKS.map(l => l.href.replace("#", ""));
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) setActive("#" + e.target.id); });
-    }, { rootMargin: "-40% 0px -55% 0px" });
-    ids.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
-    return () => io.disconnect();
-  }, []);
-  return (
-    <nav className="nav">
-      <a href="#hero" className="nav__brand">
-        <span className="dot" />
-        <span>CARLOS GUTIERRES ⌁ PRODUCT DESIGNER</span>
-      </a>
-      <div className="nav__links">
-        {NAV_LINKS.map(l => (
-          <a key={l.href} href={l.href} className={active === l.href ? "-active" : ""}>{l.label}</a>
-        ))}
-      </div>
-      <div className="nav__right">
-        <LiveClock />
-        <Magnetic as="a" href="#contact" className="btn -primary" strength={0.25}>
-          Let's talk <ArrowUpRight />
-        </Magnetic>
-      </div>
-    </nav>
-  );
-}
+const LINKEDIN = "https://www.linkedin.com/in/carlosgutierres-productdesign-ux/";
+const EMAIL = "gutierres7j@outlook.com";
 
 /* ============== HERO ============== */
 function Hero() {
   return (
-    <header id="hero" className="hero">
-      <div className="hero__meta">
-        <div className="block">
-          <span className="mono">Portfolio / 2026</span>
-        </div>
-        <div className="block" style={{textAlign: "right"}}>
-          <span className="mono">Available for select projects</span>
-        </div>
-      </div>
-
+    <header className="hero">
       <h1 className="hero__title">
         <span className="mask-line"><span>Product</span></span>
         <span className="mask-line"><span><span className="serif">designer</span></span></span>
@@ -54,18 +16,16 @@ function Hero() {
       </h1>
 
       <div className="hero__lead">
-        <p className="intro reveal">
-          I'm <strong>Carlos Gutierres</strong> — a São Paulo-based product designer with{" "}
-          <span className="muted">6+ years</span> of experience shaping digital products for brands like Ford, Coral and the Silvio Santos Group.{" "}
+        <p className="intro">
+          I'm <strong>Carlos Gutierres</strong>, a product designer in São Paulo. For 6+ years I've
+          shaped digital products for Ford, Coral and the Silvio Santos Group.{" "}
           <span className="muted">Currently Senior Product Designer at VML Brazil.</span>
         </p>
-        <div className="ctas reveal">
-          <Magnetic as="a" href="#work" className="btn -primary" strength={0.2}>
-            View selected work <ArrowUpRight />
-          </Magnetic>
-          <Magnetic as="a" href="https://www.linkedin.com/in/carlosgutierres-productdesign-ux/" target="_blank" rel="noopener" className="btn" strength={0.2}>
+        <div className="ctas">
+          <a href="#work" className="btn -primary">View selected work</a>
+          <a href={LINKEDIN} target="_blank" rel="noopener" className="btn">
             LinkedIn <ArrowUpRight />
-          </Magnetic>
+          </a>
         </div>
       </div>
     </header>
@@ -74,18 +34,22 @@ function Hero() {
 
 /* ============== WORK ============== */
 function Work() {
-  const [preview, setPreview] = useState({ on: false, src: "", x: 0, y: 0 });
-  const onMove = (e, src) => setPreview({ on: true, src, x: e.clientX, y: e.clientY });
-  const onOut = () => setPreview(p => ({ ...p, on: false }));
+  const previewRef = useRef(null);
+  const imgRef = useRef(null);
+
+  const onMove = (e, src) => {
+    const box = previewRef.current, img = imgRef.current;
+    if (!box || !img) return;
+    if (img.getAttribute("src") !== src) img.setAttribute("src", src);
+    box.style.transform = `translate(${e.clientX + 24}px, ${e.clientY - 120}px)`;
+    box.classList.add("-on");
+  };
+  const onOut = () => previewRef.current && previewRef.current.classList.remove("-on");
 
   return (
-    <section id="work" className="section">
+    <section id="work" className="section" aria-labelledby="work-title">
       <div className="section__head">
-        <span className="section__num">01 / Selected work</span>
-        <h2 className="section__title">
-          Selected <span className="serif">work</span>
-        </h2>
-        <span className="section__meta">2021 — 2025 · 05 projects</span>
+        <h2 id="work-title" className="section__title">Selected work</h2>
       </div>
 
       <div className="work">
@@ -93,28 +57,22 @@ function Work() {
           <a
             key={p.id}
             href={p.href}
-            className={`work__row reveal ${p.featured ? "-featured" : ""}`}
+            className="work__row"
             onMouseMove={(e) => onMove(e, p.image)}
             onMouseLeave={onOut}
           >
-            <span className="idx">{p.idx}</span>
-            <span className="name">
-              {p.name}
-            </span>
+            <span className="name">{p.name}</span>
             <span className="desc">{p.desc}</span>
-            <span className="tags">
-              {p.tags.map(t => <span key={t} className="tag">{t}</span>)}
-              <span className="tag">{p.year}</span>
-              <span className="go"><ArrowUpRight size={12} /></span>
+            <span className="meta">
+              <span>{p.tags.join(" · ")}</span>
+              <span className="year">{p.year}</span>
+              <ArrowUpRight size={16} />
             </span>
           </a>
         ))}
 
-        <div
-          className={`work__preview ${preview.on ? "-on" : ""}`}
-          style={{ left: preview.x, top: preview.y }}
-        >
-          {preview.src && <img src={preview.src} alt="" />}
+        <div ref={previewRef} className="work__preview" aria-hidden="true">
+          <img ref={imgRef} src={PROJECTS[0].image} alt="" />
         </div>
       </div>
     </section>
@@ -124,49 +82,41 @@ function Work() {
 /* ============== ABOUT ============== */
 function About() {
   return (
-    <section id="about" className="section">
+    <section id="about" className="section" aria-labelledby="about-title">
       <div className="section__head">
-        <span className="section__num">02 / About me</span>
-        <h2 className="section__title">
-          A designer <span className="serif">since 2007.</span>
-        </h2>
-        <span className="section__meta">São Paulo, BR</span>
+        <h2 id="about-title" className="section__title">A designer since 2007</h2>
       </div>
 
       <div className="about">
-        <div className="about__portrait reveal">
+        <div className="about__portrait">
           <img
             src="images/carlos.jpg"
-            alt="Carlos Gutierres"
+            alt="Portrait of Carlos Gutierres"
+            width="800" height="1000"
+            loading="lazy"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         </div>
 
         <div className="about__copy">
-          <p className="reveal">
-            My journey started around <span className="muted">2006/07</span>, when I was nine or ten years old. I needed a forum <span className="serif">signature</span> for a Pokémon championship — so I opened Photoshop for the first time.
+          <p>
+            It started in 2006 or 2007, when I was nine or ten. I needed a forum signature for a
+            Pokémon championship, so I opened Photoshop for the first time.
           </p>
-          <p className="reveal">
-            <span className="muted">Since that day, I've been a designer.</span> Two decades later, I'm still chasing the same feeling: turning a vague idea into something people can actually use.
+          <p>
+            <span className="muted">I've been designing ever since.</span> Twenty years on, the part
+            I enjoy most hasn't changed: taking a vague idea and turning it into something people can use.
           </p>
-          <p className="reveal">
-            Today I focus on <strong>product design</strong> — the craft of shaping interfaces, flows and systems that make complex things feel obvious.
+          <p>
+            Today I work in <strong>product design</strong>: interfaces, flows and the systems behind
+            them, for products where the complicated parts need to feel obvious.
           </p>
 
-          <div className="about__stats reveal">
-            <div className="about__stat">
-              <span className="n">06<span className="serif">+</span></span>
-              <span className="l">Years in product</span>
-            </div>
-            <div className="about__stat">
-              <span className="n">40<span className="serif">+</span></span>
-              <span className="l">Shipped projects</span>
-            </div>
-            <div className="about__stat">
-              <span className="n">04</span>
-              <span className="l">Languages spoken</span>
-            </div>
-          </div>
+          <dl className="about__facts">
+            <div><dt>years in product</dt><dd>6+</dd></div>
+            <div><dt>shipped projects</dt><dd>40+</dd></div>
+            <div><dt>languages spoken</dt><dd>4</dd></div>
+          </dl>
         </div>
       </div>
     </section>
@@ -176,63 +126,45 @@ function About() {
 /* ============== EXPERIENCE ============== */
 function Experience() {
   return (
-    <section id="experience" className="section">
+    <section id="experience" className="section" aria-labelledby="experience-title">
       <div className="section__head">
-        <span className="section__num">03 / Experience</span>
-        <h2 className="section__title">
-          Where I've <span className="serif">worked.</span>
-        </h2>
-        <span className="section__meta">2017 — Present</span>
+        <h2 id="experience-title" className="section__title">Where I've worked</h2>
       </div>
 
-      <div className="exp">
+      <ul className="exp">
         {EXPERIENCE.map((x) => (
-          <div key={x.company + x.period} className="exp__row reveal">
+          <li key={x.company + x.period} className="exp__row">
             <span className="exp__company">{x.company}</span>
             <span className="exp__role">{x.role}</span>
-            <span className="exp__period" style={{textAlign:"left"}}>
-              {x.note && <span style={{color: "var(--accent)", marginRight: 8}}>● {x.note}</span>}
-            </span>
             <span className="exp__period">{x.period}</span>
-          </div>
+          </li>
         ))}
+      </ul>
+
+      <div className="section__head section__sub">
+        <h2 className="section__title">Education</h2>
       </div>
 
-      <div className="section__head" style={{marginTop: 140}}>
-        <span className="section__num">04 / Education</span>
-        <h2 className="section__title">
-          How I <span className="serif">learned.</span>
-        </h2>
-        <span className="section__meta">Formal & self-taught</span>
-      </div>
-
-      <div className="edu">
+      <ul className="edu">
         {EDUCATION.map((e) => (
-          <div key={e.school + e.degree} className="edu__row reveal">
+          <li key={e.school + e.degree} className="edu__row">
             <span className="edu__school">{e.school}</span>
-            <span className="edu__degree">{e.degree}</span>
-            <span className="edu__note">{e.note}</span>
-            <span className="exp__period" />
-          </div>
+            <span className="edu__degree"><strong>{e.degree}</strong>{e.note}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
 
-/* ============== TRUSTED marquee ============== */
-function Trusted() {
-  const items = [...TRUSTED, ...TRUSTED];
+/* ============== CLIENTS ============== */
+function Clients() {
   return (
-    <section className="trusted" aria-label="Trusted by">
-      <div className="wrap" style={{marginBottom: 48}}>
-        <span className="eyebrow">Trusted by</span>
-      </div>
-      <div className="marquee">
-        {items.map((t, i) => (
-          <span key={i} className="marquee__item">{t}</span>
-        ))}
-      </div>
+    <section className="clients" aria-labelledby="clients-title">
+      <h2 id="clients-title" className="clients__title">Brands I've designed for</h2>
+      <ul className="clients__list">
+        {CLIENTS.map((c) => <li key={c}>{c}</li>)}
+      </ul>
     </section>
   );
 }
@@ -240,49 +172,36 @@ function Trusted() {
 /* ============== CONTACT ============== */
 function Contact() {
   return (
-    <section id="contact" className="contact">
-      <span className="eyebrow contact__eyebrow">Let's work together</span>
-      <h2 className="contact__title">
+    <section id="contact" className="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" className="contact__title">
         Have an idea?<br/>
         <span className="serif">Let's build it.</span>
       </h2>
 
-      <Magnetic as="a" href="mailto:gutierres7j@outlook.com" className="contact__mail" strength={0.15}>
-        gutierres7j@outlook.com <ArrowUpRight size={18} />
-      </Magnetic>
+      <a href={`mailto:${EMAIL}`} className="contact__mail">
+        {EMAIL} <ArrowUpRight size={18} />
+      </a>
 
-      <div className="contact__grid">
-        <div className="block">
-          <span className="l">Based in</span>
-          <span className="v">São Paulo, Brazil</span>
+      <dl className="contact__grid">
+        <div>
+          <dt>Based in</dt>
+          <dd>São Paulo, Brazil</dd>
         </div>
-        <div className="block">
-          <span className="l">Status</span>
-          <span className="v" style={{color: "#4ade80"}}>● Open to select projects</span>
+        <div>
+          <dt>Status</dt>
+          <dd>Open to select projects</dd>
         </div>
-        <div className="block">
-          <span className="l">Social</span>
-          <span className="v">
-            <a href="https://www.linkedin.com/in/carlosgutierres-productdesign-ux/" target="_blank" rel="noopener">LinkedIn ↗</a>
-          </span>
+        <div>
+          <dt>Social</dt>
+          <dd><a href={LINKEDIN} target="_blank" rel="noopener">LinkedIn <ArrowUpRight size={12} /></a></dd>
         </div>
-        <div className="block">
-          <span className="l">Languages</span>
-          <span className="v">PT · EN · ES · FR</span>
+        <div>
+          <dt>Languages</dt>
+          <dd>PT · EN · ES · FR</dd>
         </div>
-      </div>
+      </dl>
     </section>
   );
 }
 
-function Footer() {
-  return (
-    <footer className="footer">
-      <span>© 2026 · Carlos Gutierres</span>
-      <span>Product Designer · São Paulo</span>
-      <a href="#hero">↑ Back to top</a>
-    </footer>
-  );
-}
-
-Object.assign(window, { Nav, Hero, Work, About, Experience, Trusted, Contact, Footer });
+Object.assign(window, { Hero, Work, About, Experience, Clients, Contact });
