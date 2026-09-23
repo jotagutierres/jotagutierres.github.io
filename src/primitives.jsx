@@ -30,35 +30,70 @@ const NAV_ITEMS = [
   { id: "work", label: "Work" },
   { id: "about", label: "About" },
   { id: "experience", label: "Experience", optional: true },
-  { id: "contact", label: "Contact" },
 ];
+
+/* nav steps aside while reading down, returns on any scroll up */
+function useNavScroll() {
+  const [state, setState] = useState({ scrolled: false, hidden: false });
+  useEffect(() => {
+    let last = window.scrollY, raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const delta = y - last;
+      if (Math.abs(delta) < 6) return;
+      const next = { scrolled: y > 8, hidden: delta > 0 && y > 160 };
+      setState((s) => (s.scrolled === next.scrolled && s.hidden === next.hidden ? s : next));
+      last = y;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    // keyboard users reaching the nav should always see it
+    const onFocus = (e) => { if (e.target.closest && e.target.closest(".nav")) setState((s) => ({ ...s, hidden: false })); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("focusin", onFocus);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("focusin", onFocus);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return state;
+}
 
 /* ============ nav (home tracks the active section; case pages link home) ============ */
 function SiteNav({ base = "" }) {
   const [active, setActive] = useState("");
+  const { scrolled, hidden } = useNavScroll();
+  const home = base ? `${base}index.html` : "";
+
   useEffect(() => {
     if (base) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
     }, { rootMargin: "-40% 0px -55% 0px" });
-    NAV_ITEMS.forEach(({ id }) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    [...NAV_ITEMS.map((n) => n.id), "contact"].forEach((id) => {
+      const el = document.getElementById(id); if (el) io.observe(el);
+    });
     return () => io.disconnect();
   }, [base]);
 
   return (
-    <nav className="nav" aria-label="Main">
-      <a href={base ? `${base}index.html` : "#top"} className="nav__brand">Carlos Gutierres</a>
+    <nav className={`nav${scrolled ? " -scrolled" : ""}${hidden ? " -hidden" : ""}`} aria-label="Main">
+      <a href={home || "#top"} className="nav__brand">
+        Carlos Gutierres<span className="nav__role">Product designer</span>
+      </a>
       <div className="nav__links">
         {NAV_ITEMS.map(({ id, label, optional }) => (
           <a
             key={id}
-            href={`${base ? `${base}index.html` : ""}#${id}`}
+            href={`${home}#${id}`}
             className={[active === id ? "-active" : "", optional ? "-optional" : ""].join(" ").trim() || undefined}
             aria-current={active === id ? "true" : undefined}
           >
             {label}
           </a>
         ))}
+        <a href={`${home}#contact`} className="nav__cta">Contact</a>
       </div>
     </nav>
   );

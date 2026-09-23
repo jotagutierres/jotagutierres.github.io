@@ -10,23 +10,36 @@ function Hero() {
     <header className="hero">
       <h1 className="hero__title">
         <span className="mask-line"><span>Product</span></span>
-        <span className="mask-line"><span><span className="serif">designer</span></span></span>
+        <span className="mask-line -indent"><span>
+          <span className="hero__face"><img src="images/carlos.jpg" alt="" width="520" height="520" /></span>
+          <span className="serif">designer</span>
+        </span></span>
         <span className="mask-line"><span>building <span className="serif">calm,</span></span></span>
-        <span className="mask-line"><span>useful <span className="accent">interfaces.</span></span></span>
+        <span className="mask-line -indent-sm"><span>useful <span className="accent">interfaces.</span></span></span>
       </h1>
 
       <div className="hero__lead enter">
-        <p className="intro">
-          I'm <strong>Carlos Gutierres</strong>, a product designer in São Paulo. For 6+ years I've
-          shaped digital products for Ford, Coral and the Silvio Santos Group.{" "}
-          <span className="muted">Currently Senior Product Designer at VML Brazil.</span>
-        </p>
-        <div className="ctas">
-          <a href="#work" className="btn -primary">View selected work</a>
-          <a href={LINKEDIN} target="_blank" rel="noopener" className="btn">
-            LinkedIn <ArrowUpRight />
-          </a>
+        <div className="hero__intro">
+          <p className="intro">
+            I'm <strong>Carlos Gutierres</strong>, a product designer in São Paulo. For 6+ years I've
+            shaped digital products for Ford, Coral and the Silvio Santos Group.{" "}
+            <span className="muted">Currently Senior Product Designer at VML Brazil.</span>
+          </p>
+          <div className="ctas">
+            <a href="#work" className="btn -primary">View selected work</a>
+            <a href={LINKEDIN} target="_blank" rel="noopener" className="btn">
+              LinkedIn <ArrowUpRight />
+            </a>
+          </div>
         </div>
+
+        <a href={PROJECTS[0].href} className="hero__latest">
+          <span className="k">Latest case study</span>
+          <span className="t">{PROJECTS[0].name} <ArrowUpRight size={18} /></span>
+          <span className="m">
+            Full modem activation <span className="fig">11.3% → 16.5%</span>
+          </span>
+        </a>
       </div>
     </header>
   );
@@ -99,6 +112,9 @@ function Work() {
             className="work__row"
             onMouseMove={(e) => onMove(e, i)}
           >
+            <span className="thumb" aria-hidden="true">
+              <img src={p.image} alt="" loading="lazy" decoding="async" />
+            </span>
             <span className="name">{p.name}</span>
             <span className="desc">{p.desc}</span>
             <span className="meta">
@@ -132,7 +148,7 @@ function About() {
           <img
             src="images/carlos.jpg"
             alt="Portrait of Carlos Gutierres"
-            width="800" height="1000"
+            width="520" height="520"
             loading="lazy"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />

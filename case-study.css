@@ -413,7 +413,9 @@
   transform-origin: left;
   transform: scaleX(0);
   pointer-events: none;
+  transition: translate .45s var(--ease-out);
 }
+.nav.-hidden + .progress { translate: 0 calc(1px - var(--nav-h)); }
 @supports (animation-timeline: scroll()) {
   .progress {
     animation: read-progress linear both;
