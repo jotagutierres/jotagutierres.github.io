@@ -26,11 +26,19 @@ const ArrowLeft = ({ size = 14 }) => (
   </svg>
 );
 
-const NAV_ITEMS = [
-  { id: "work", label: "Work" },
-  { id: "about", label: "About" },
-  { id: "experience", label: "Experience", optional: true },
-];
+function LanguageSwitch() {
+  const locale = SiteI18n.useLocale();
+  return (
+    <div className="lang-switch" role="group" aria-label={locale === "pt" ? "Idioma" : "Language"}>
+      {["en", "pt"].map((value) => (
+        <button key={value} type="button" lang={value === "pt" ? "pt-BR" : "en"}
+          aria-label={value === "pt" ? "Português" : "English"}
+          aria-pressed={locale === value}
+          onClick={() => SiteI18n.setLocale(value)}>{value.toUpperCase()}</button>
+      ))}
+    </div>
+  );
+}
 
 /* nav steps aside while reading down, returns on any scroll up */
 function useNavScroll() {
@@ -62,51 +70,59 @@ function useNavScroll() {
 
 /* ============ nav (home tracks the active section; case pages link home) ============ */
 function SiteNav({ base = "" }) {
+  const locale = SiteI18n.useLocale();
   const [active, setActive] = useState("");
   const { scrolled, hidden } = useNavScroll();
   const home = base ? `${base}index.html` : "";
+  const navItems = [
+    { id: "work", label: locale === "pt" ? "Projetos" : "Work" },
+    { id: "about", label: locale === "pt" ? "Sobre" : "About" },
+    { id: "experience", label: locale === "pt" ? "Experiência" : "Experience", optional: true },
+  ];
 
   useEffect(() => {
     if (base) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
     }, { rootMargin: "-40% 0px -55% 0px" });
-    [...NAV_ITEMS.map((n) => n.id), "contact"].forEach((id) => {
+    ["work", "about", "experience", "contact"].forEach((id) => {
       const el = document.getElementById(id); if (el) io.observe(el);
     });
     return () => io.disconnect();
   }, [base]);
 
   return (
-    <nav className={`nav${scrolled ? " -scrolled" : ""}${hidden ? " -hidden" : ""}`} aria-label="Main">
-      <a href={home || "#top"} className="nav__brand">
-        Carlos Gutierres<span className="nav__role">Product designer</span>
+    <nav className={`nav${scrolled ? " -scrolled" : ""}${hidden ? " -hidden" : ""}`} aria-label={locale === "pt" ? "Navegação principal" : "Main"}>
+      <a href={base ? SiteI18n.link(home) : "#top"} className="nav__brand">
+        Carlos Gutierres<span className="nav__role">{locale === "pt" ? "Designer de produto" : "Product designer"}</span>
       </a>
       <div className="nav__links">
-        {NAV_ITEMS.map(({ id, label, optional }) => (
+        {navItems.map(({ id, label, optional }) => (
           <a
             key={id}
-            href={`${home}#${id}`}
-            className={[active === id ? "-active" : "", optional ? "-optional" : ""].join(" ").trim() || undefined}
+            href={base ? SiteI18n.link(`${home}#${id}`) : `#${id}`}
+            className={[active === id ? "-active" : "", optional ? "-optional" : "", id === "about" ? "-hide-narrow" : "", id === "work" ? "-hide-compact" : ""].join(" ").trim() || undefined}
             aria-current={active === id ? "true" : undefined}
           >
             {label}
           </a>
         ))}
-        <a href={`${home}#contact`} className="nav__cta">Contact</a>
+        <LanguageSwitch />
+        <a href={base ? SiteI18n.link(`${home}#contact`) : "#contact"} className="nav__cta">{locale === "pt" ? "Contato" : "Contact"}</a>
       </div>
     </nav>
   );
 }
 
 function SiteFooter() {
+  const locale = SiteI18n.useLocale();
   return (
     <footer className="footer">
       <span>© 2026 Carlos Gutierres</span>
-      <span>Product designer in São Paulo</span>
-      <a href="#top">Back to top</a>
+      <span>{locale === "pt" ? "Designer de produto em São Paulo" : "Product designer in São Paulo"}</span>
+      <a href="#top">{locale === "pt" ? "Voltar ao topo" : "Back to top"}</a>
     </footer>
   );
 }
 
-Object.assign(window, { useHeroReveal, ArrowUpRight, ArrowLeft, SiteNav, SiteFooter });
+Object.assign(window, { useHeroReveal, ArrowUpRight, ArrowLeft, SiteNav, SiteFooter, LanguageSwitch });

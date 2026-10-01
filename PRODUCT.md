@@ -13,7 +13,7 @@ Present selected product design projects, experience, and a way to contact Carlo
 
 ## Capabilities and Constraints
 - Static GitHub Pages portfolio with no build step; React via Babel Standalone powers the existing pages.
-- Existing page copy is in English; the owner confirmed English for the 404 page.
+- Portfolio pages are available in English and Brazilian Portuguese. The first visit uses the visitor's browser language when it is English or Portuguese; a manual EN/PT choice persists across portfolio pages.
 - A root `404.html` handles missing URLs on GitHub Pages.
 
 ## Brand Commitments

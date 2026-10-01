@@ -34,23 +34,42 @@ const RESULTS = [
   ]},
 ];
 
+function localizeFord(node) {
+  if (Array.isArray(node)) return node.map(localizeFord);
+  if (typeof node === "string") {
+    const key = node.trim().replace(/\s+/g, " ");
+    const translated = window.FORD_CASE_PT[key] || (/^[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:%|pp)?$/.test(key)
+      ? key.replace(/,/g, "\u0000").replace(/\./g, ",").replace(/\u0000/g, ".")
+      : null);
+    return translated ? node.replace(node.trim(), translated) : node;
+  }
+  if (!React.isValidElement(node)) return node;
+  const props = {};
+  for (const key of ["children", "meta", "title", "lead", "leadMuted", "aria-label"]) {
+    if (key in node.props) props[key] = localizeFord(node.props[key]);
+  }
+  return React.cloneElement(node, props);
+}
+
 function PrototypeLink({ end }) {
+  const pt = SiteI18n.useLocale() === "pt";
   return (
     <div className={`cs-figma${end ? " -end" : ""}`}>
       <a href={FIGMA_URL} target="_blank" rel="noopener">
         <span className="t">
           {end
-            ? <>The prototype is the best way to review this one. <span className="muted">Every screen, email and flow is in Figma.</span></>
-            : <>The full case is an interactive Figma prototype. <span className="muted">All screens, transitions and email flows.</span></>}
+            ? pt ? <>O protótipo é a melhor maneira de explorar este projeto. <span className="muted">Todas as telas, mensagens e etapas estão no Figma.</span></> : <>The prototype is the best way to review this one. <span className="muted">Every screen, email and flow is in Figma.</span></>
+            : pt ? <>O estudo completo está em um protótipo interativo no Figma. <span className="muted">Todas as telas, transições e jornadas de e-mail.</span></> : <>The full case is an interactive Figma prototype. <span className="muted">All screens, transitions and email flows.</span></>}
         </span>
-        <span className="btn -primary">Open prototype <ArrowUpRight /></span>
+        <span className="btn -primary">{pt ? "Abrir protótipo" : "Open prototype"} <ArrowUpRight /></span>
       </a>
     </div>
   );
 }
 
 function FordCase() {
-  return (
+  const locale = SiteI18n.useLocale();
+  const page = (
     <CaseShell>
       <CaseHero
         meta={[
@@ -340,6 +359,7 @@ function FordCase() {
       <CaseNext next={{ name: "FordPass®", href: "fordpass.html" }} />
     </CaseShell>
   );
+  return locale === "pt" ? localizeFord(page) : page;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

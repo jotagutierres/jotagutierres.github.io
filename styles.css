@@ -124,6 +124,31 @@ img { display: block; max-width: 100%; }
   align-items: center;
   gap: 28px;
 }
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  flex: none;
+}
+.lang-switch button {
+  min-width: 36px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-muted);
+  font: 500 11px/1 var(--f-mono);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.lang-switch button[aria-pressed="true"] {
+  background: var(--fg);
+  color: var(--bg);
+}
+.lang-switch button:hover:not([aria-pressed="true"]) { color: var(--fg); }
 .nav__links .nav__cta {
   margin-left: 4px;
   padding: 9px 16px;
@@ -162,9 +187,21 @@ img { display: block; max-width: 100%; }
 }
 @media (max-width: 560px) {
   :root { --gutter: 16px; --nav-h: 60px; }
-  .nav__links { gap: 16px; }
+  .nav__links { gap: 8px; }
   .nav__links .-optional { display: none; }
-  .nav__links .nav__cta { padding: 8px 14px; margin-left: 0; }
+  .nav__links .-hide-narrow { display: none; }
+  .nav__links .nav__cta { padding: 8px 11px; margin-left: 0; }
+}
+@media (max-width: 430px) {
+  .nav__links .-hide-compact { display: none; }
+  .nav__brand { font-size: 14px; }
+}
+@media (max-width: 340px) {
+  .nav__links { gap: 6px; }
+  .nav__links .nav__cta { padding-inline: 8px; }
+}
+@media (max-width: 560px) {
+  html[lang="pt-BR"] .hero__title { font-size: clamp(42px, 10.6vw, 60px); }
 }
 
 /* -------- BTN -------- */

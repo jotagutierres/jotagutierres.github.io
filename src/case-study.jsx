@@ -3,11 +3,13 @@
 
 /* paragraphs and list items are authored as small HTML strings in each page */
 const Html = ({ as: Tag = "p", html }) => <Tag dangerouslySetInnerHTML={{ __html: html }} />;
+const originalPageTitle = document.title;
 
 function CaseHero({ meta, title, lead, leadMuted }) {
+  const pt = SiteI18n.useLocale() === "pt";
   return (
     <section className="cs-hero">
-      <a href="../index.html#work" className="cs-back"><ArrowLeft /> All work</a>
+      <a href={SiteI18n.link("../index.html#work")} className="cs-back"><ArrowLeft /> {pt ? "Todos os projetos" : "All work"}</a>
 
       <dl className="cs-hero__meta">
         {meta.map(([k, v]) => (
@@ -26,10 +28,11 @@ function CaseHero({ meta, title, lead, leadMuted }) {
 }
 
 function CaseNext({ next }) {
+  const pt = SiteI18n.useLocale() === "pt";
   return (
     <div className="cs-next">
-      <a href={next.href}>
-        <span className="label">Next project</span>
+      <a href={SiteI18n.link(next.href)}>
+        <span className="label">{pt ? "Próximo projeto" : "Next project"}</span>
         <span className="t">{next.name} <ArrowUpRight size={48} /></span>
       </a>
     </div>
@@ -52,55 +55,61 @@ function CaseShell({ children }) {
    Pass a `data` object with all the content. One place to edit.
 */
 function CaseStudyPage({ data }) {
+  const pt = SiteI18n.useLocale() === "pt";
+  const slug = window.location.pathname.split("/").pop().replace(/\.html$/, "");
+  const content = pt && window.CASE_PT && window.CASE_PT[slug] ? { ...data, ...window.CASE_PT[slug] } : data;
+  React.useEffect(() => {
+    document.title = pt && content.pageTitle ? content.pageTitle : originalPageTitle;
+  }, [pt, content.pageTitle]);
   return (
     <CaseShell>
       <CaseHero
-        meta={[["Client", data.client], ["Role", data.role], ["Year", data.year], ["Scope", data.scope]]}
-        title={data.title}
-        lead={data.lead}
+        meta={[[pt ? "Cliente" : "Client", content.client], [pt ? "Função" : "Role", content.role], [pt ? "Ano" : "Year", content.year], [pt ? "Escopo" : "Scope", content.scope]]}
+        title={content.title}
+        lead={content.lead}
       />
 
       <div className="cs-cover">
         <div className="cs-cover__inner enter -clip">
-          <img src={data.cover} alt={data.coverAlt} />
+          <img src={content.cover} alt={content.coverAlt} />
         </div>
       </div>
 
-      <div className="cs-divider"><h2>Context</h2></div>
+      <div className="cs-divider"><h2>{pt ? "Contexto" : "Context"}</h2></div>
       <section className="cs">
         <div className="cs__block">
-          <span className="label">Background</span>
-          <div>{data.context.map((p, i) => <Html key={i} html={p} />)}</div>
+          <span className="label">{pt ? "Cenário" : "Background"}</span>
+          <div>{content.context.map((p, i) => <Html key={i} html={p} />)}</div>
         </div>
         <div className="cs__block">
-          <span className="label">Challenge</span>
-          <div>{data.challenge.map((p, i) => <Html key={i} html={p} />)}</div>
+          <span className="label">{pt ? "Desafio" : "Challenge"}</span>
+          <div>{content.challenge.map((p, i) => <Html key={i} html={p} />)}</div>
         </div>
       </section>
 
-      <div className="cs-divider"><h2>Process</h2></div>
+      <div className="cs-divider"><h2>{pt ? "Processo" : "Process"}</h2></div>
       <section className="cs">
         <div className="cs__block">
-          <span className="label">Approach</span>
+          <span className="label">{pt ? "Abordagem" : "Approach"}</span>
           <div>
-            <h3>{data.approachTitle}</h3>
-            {data.approach.map((p, i) => <Html key={i} html={p} />)}
+            <h3>{content.approachTitle}</h3>
+            {content.approach.map((p, i) => <Html key={i} html={p} />)}
           </div>
         </div>
         <div className="cs__block">
-          <span className="label">Key decisions</span>
-          <ul>{data.decisions.map((d, i) => <Html key={i} as="li" html={d} />)}</ul>
+          <span className="label">{pt ? "Decisões principais" : "Key decisions"}</span>
+          <ul>{content.decisions.map((d, i) => <Html key={i} as="li" html={d} />)}</ul>
         </div>
       </section>
 
-      <div className="cs-divider"><h2>Outcome</h2></div>
+      <div className="cs-divider"><h2>{pt ? "Resultados" : "Outcome"}</h2></div>
       <section className="cs">
         <div className="cs__block">
-          <span className="label">Impact</span>
+          <span className="label">{pt ? "Impacto" : "Impact"}</span>
           <div>
-            {data.outcome.map((p, i) => <Html key={i} html={p} />)}
+            {content.outcome.map((p, i) => <Html key={i} html={p} />)}
             <dl className="cs-figures">
-              {data.metrics.map((m) => (
+              {content.metrics.map((m) => (
                 <div key={m.l}>
                   <dt>{m.l}</dt>
                   <dd>{m.n}</dd>
@@ -110,12 +119,12 @@ function CaseStudyPage({ data }) {
           </div>
         </div>
         <div className="cs__block">
-          <span className="label">Reflection</span>
-          <div>{data.reflection.map((p, i) => <Html key={i} html={p} />)}</div>
+          <span className="label">{pt ? "Reflexão" : "Reflection"}</span>
+          <div>{content.reflection.map((p, i) => <Html key={i} html={p} />)}</div>
         </div>
       </section>
 
-      <CaseNext next={data.next} />
+      <CaseNext next={content.next} />
     </CaseShell>
   );
 }

@@ -10,17 +10,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css?v=11" />
+  <link rel="stylesheet" href="/styles.css?v=12" />
   <link rel="stylesheet" href="/404.css" />
+  <script src="/src/i18n.js"></script>
 </head>
 <body>
-  <a class="not-found__skip" href="#main">Skip to content</a>
+  <a class="not-found__skip" href="#main" data-i18n="skip">Skip to content</a>
   <nav class="nav" aria-label="Main">
     <a href="/" class="nav__brand">Carlos Gutierres<span class="nav__role">Product designer</span></a>
     <div class="nav__links">
-      <a href="/#work">Work</a>
-      <a href="/#about">About</a>
+      <a href="/#work" class="-hide-compact" data-i18n="work">Work</a>
+      <a href="/#about" class="-hide-narrow" data-i18n="about">About</a>
       <a href="/#experience" class="-optional">Experience</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" lang="en" data-lang="en" aria-label="English">EN</button>
+        <button type="button" lang="pt-BR" data-lang="pt" aria-label="Português">PT</button>
+      </div>
       <a href="/#contact" class="nav__cta">Contact</a>
     </div>
   </nav>
@@ -30,17 +35,41 @@
       <h1 class="not-found__number" aria-label="Error 404">4<span class="not-found__zero">0<span class="not-found__orbit" aria-hidden="true"></span></span>4</h1>
       <div class="not-found__bottom">
         <div class="not-found__message">
-          <p class="not-found__title">A little <span class="serif">off course.</span></p>
-          <p class="not-found__description">The page you’re looking for isn’t here. Let’s get you back to the good stuff.</p>
+          <p class="not-found__title"><span data-i18n="titleStart">A little </span><span class="serif" data-i18n="titleEnd">off course.</span></p>
+          <p class="not-found__description" data-i18n="description">The page you’re looking for isn’t here. Let’s get you back to the good stuff.</p>
         </div>
         <div class="not-found__actions">
-          <a class="btn -primary" href="/">Back to home <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          <a class="not-found__work-link" href="/#work">Explore selected work <svg class="arrow" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn -primary" href="/"><span data-i18n="home">Back to home</span> <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="not-found__work-link" href="/#work"><span data-i18n="projects">Explore selected work</span> <svg class="arrow" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </div>
   </main>
 
-  <footer class="not-found__footer"><span>© 2026 Carlos Gutierres</span><span>Product designer in São Paulo</span></footer>
+  <footer class="not-found__footer"><span>© 2026 Carlos Gutierres</span><span data-i18n="footer">Product designer in São Paulo</span></footer>
+  <script>
+    const copy404 = {
+      en: { skip: "Skip to content", work: "Work", about: "About", experience: "Experience", contact: "Contact", role: "Product designer", titleStart: "A little ", titleEnd: "off course.", description: "The page you’re looking for isn’t here. Let’s get you back to the good stuff.", home: "Back to home", projects: "Explore selected work", footer: "Product designer in São Paulo" },
+      pt: { skip: "Pular para o conteúdo", work: "Projetos", about: "Sobre", experience: "Experiência", contact: "Contato", role: "Designer de produto", titleStart: "Fora da ", titleEnd: "rota.", description: "A página que você procura não está aqui. Vamos voltar aos projetos.", home: "Voltar ao início", projects: "Ver projetos selecionados", footer: "Designer de produto em São Paulo" },
+    };
+    function update404() {
+      const locale = SiteI18n.getLocale();
+      const copy = copy404[locale];
+      document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = copy[node.dataset.i18n]; });
+      document.querySelector(".nav__role").textContent = copy.role;
+      document.querySelector(".nav__links .-optional").textContent = copy.experience;
+      document.querySelector(".nav__cta").textContent = copy.contact;
+      document.querySelector("nav").setAttribute("aria-label", locale === "pt" ? "Navegação principal" : "Main");
+      document.querySelector("h1").setAttribute("aria-label", locale === "pt" ? "Erro 404" : "Error 404");
+      document.querySelector(".lang-switch").setAttribute("aria-label", locale === "pt" ? "Idioma" : "Language");
+      document.querySelectorAll("[data-lang]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.lang === locale)));
+      document.querySelectorAll("a[href^='/']").forEach((link) => { link.href = SiteI18n.link(link.getAttribute("href")); });
+      document.title = locale === "pt" ? "Página não encontrada — Carlos Gutierres" : "Page not found — Carlos Gutierres";
+      document.querySelector('meta[name="description"]').content = locale === "pt" ? "Esta página não foi encontrada. Volte ao portfólio de design de produto de Carlos Gutierres." : "This page could not be found. Return to Carlos Gutierres's product design portfolio.";
+    }
+    document.querySelectorAll("[data-lang]").forEach((button) => button.addEventListener("click", () => SiteI18n.setLocale(button.dataset.lang)));
+    window.addEventListener("portfolio-language-change", update404);
+    update404();
+  </script>
 </body>
 </html>
